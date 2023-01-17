@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace First_task.Migrations
 {
     [DbContext(typeof(TaskDbContext))]
-    [Migration("20230117120434_Init db")]
+    [Migration("20230117141944_Init db")]
     partial class Initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,9 +41,8 @@ namespace First_task.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("DoubleNumber")
-                        .HasPrecision(2, 8)
-                        .HasColumnType("float(2)");
+                    b.Property<decimal>("DecimalNumber")
+                        .HasColumnType("decimal(14,8)");
 
                     b.Property<int>("IntegerNumber")
                         .HasMaxLength(9)

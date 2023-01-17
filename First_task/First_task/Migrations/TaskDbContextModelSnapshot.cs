@@ -39,9 +39,8 @@ namespace First_task.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("DoubleNumber")
-                        .HasPrecision(2, 8)
-                        .HasColumnType("float(2)");
+                    b.Property<decimal>("DecimalNumber")
+                        .HasColumnType("decimal(14,8)");
 
                     b.Property<int>("IntegerNumber")
                         .HasMaxLength(9)

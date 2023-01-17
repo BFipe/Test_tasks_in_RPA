@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace First_task.DatabaseOperations.Entities
         public string LatinSymbols { get; set; }
         public string CyrillicSymbols { get; set; }
         public int IntegerNumber { get; set; }
-        public double DoubleNumber { get; set; }
+
+        public decimal DecimalNumber { get; set; }
     }
 }

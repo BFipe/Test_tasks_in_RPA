@@ -19,7 +19,7 @@ namespace First_task.Migrations
                     LatinSymbols = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     CyrillicSymbols = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     IntegerNumber = table.Column<int>(type: "int", maxLength: 9, nullable: false),
-                    DoubleNumber = table.Column<double>(type: "float(2)", precision: 2, scale: 8, nullable: false)
+                    DecimalNumber = table.Column<decimal>(type: "decimal(14,8)", nullable: false)
                 },
                 constraints: table =>
                 {

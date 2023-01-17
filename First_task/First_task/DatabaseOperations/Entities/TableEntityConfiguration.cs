@@ -21,7 +21,7 @@ namespace First_task.DatabaseOperations.Entities
             builder.Property(q => q.CyrillicSymbols).HasMaxLength(10).IsRequired();
             builder.Property(q => q.LatinSymbols).HasMaxLength(10).IsRequired();
 
-            builder.Property(q => q.DoubleNumber).HasPrecision(2, 8).IsRequired();
+            builder.Property(q => q.DecimalNumber).HasColumnType("decimal(14,8)").IsRequired();
             builder.Property(q => q.IntegerNumber).HasMaxLength(9).IsRequired();
         }
     }

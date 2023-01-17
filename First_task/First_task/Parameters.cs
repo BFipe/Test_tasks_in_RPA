@@ -12,6 +12,6 @@ namespace First_task
 
         public static int TextFilesNumber = 100;
         public static int TextRowsNumber = 100_000;
-        public static string FolderDataPath = @"D:\Рабочий стол\Visual Studio\Test_tasks_in_RPA\First_task\First_task\DataFolder";
+        public static string FolderDataPath = @"D:\Рабочий стол\Visual Studio\TesterFolder";
     }
 }

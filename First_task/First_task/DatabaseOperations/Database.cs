@@ -70,6 +70,24 @@ namespace First_task.DatabaseOperations
                 Console.WriteLine($"Sucsesfully imported {rowsAddedCounter} rows out of {rowsTotalCounter} in the database!");
             }
         }
+
+        public double AllIntegerSum() 
+        {
+            return _dbContext.TableEntities.Sum(q => (double)q.IntegerNumber);
+        }
+
+        public decimal DoubleMedian()
+        {
+            var decimalNumbers = _dbContext.TableEntities.Select(q => q.DecimalNumber).OrderBy(q => q).ToList();
+            if (decimalNumbers.Count() % 2 == 1)
+            {
+                return decimalNumbers[(decimalNumbers.Count() / 2 + 1)];
+            }
+            else
+            {
+                return (decimalNumbers[(decimalNumbers.Count() / 2)] + decimalNumbers[(decimalNumbers.Count() / 2 - 1)]) / 2;
+            }
+        }
     }
 }
     

@@ -1,5 +1,6 @@
 ﻿using First_task.DatabaseOperations.Entities;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,9 @@ namespace First_task.DatabaseOperations
     {
         private readonly TaskDbContext _dbContext;
 
-        public Database()
+        public Database(string connectionString)
         {
-            _dbContext = new TaskDbContext();
+            _dbContext = new TaskDbContext(connectionString);
         }
 
         public async Task AddDataFromTxt(string txtFilePath)
@@ -29,9 +30,10 @@ namespace First_task.DatabaseOperations
             int rowsTotalCounter = File.ReadAllLines(txtFilePath).Length;
             Console.WriteLine($"The total number of rows is {rowsTotalCounter}");
 
-            int dataPackCount = rowsTotalCounter / 400;
+            int dataPackCount = rowsTotalCounter / 200;
             Console.WriteLine("_______________________________________________________");
             Console.WriteLine("Beginning of the process:");
+
             using (StreamReader reader = new StreamReader(txtFilePath))
             {
                 List<TableEntity> tableEntities = new List<TableEntity>();
@@ -52,11 +54,11 @@ namespace First_task.DatabaseOperations
                     tableEntities.Add(entity);
                     rowsAddedCounter++;
 
-                    if (tableEntities.Count() == dataPackCount)
+                    if (tableEntities.Count == dataPackCount)
                     {
                         await _dbContext.TableEntities.AddRangeAsync(tableEntities);
                         await _dbContext.SaveChangesAsync();
-                        Console.WriteLine($"{String.Format("{0:0.00}", ((double)rowsAddedCounter / rowsTotalCounter * 100))}% done ({rowsAddedCounter} of {rowsTotalCounter} rows)");
+                        Console.WriteLine($"{String.Format("{0:0.0}", ((double)rowsAddedCounter / rowsTotalCounter * 100))}% done ({rowsAddedCounter} of {rowsTotalCounter} rows)");
                         tableEntities.Clear();
                     }
                 }
@@ -70,8 +72,7 @@ namespace First_task.DatabaseOperations
                 Console.WriteLine($"Sucsesfully imported {rowsAddedCounter} rows out of {rowsTotalCounter} in the database!");
             }
         }
-
-        public double AllIntegerSum() 
+        public double AllIntegerSum()
         {
             return _dbContext.TableEntities.Sum(q => (double)q.IntegerNumber);
         }
@@ -90,4 +91,4 @@ namespace First_task.DatabaseOperations
         }
     }
 }
-    
+

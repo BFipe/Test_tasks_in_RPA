@@ -57,7 +57,7 @@ namespace First_task
                         }
                     }
                     Console.WriteLine($"Finished merging rows from {filePath.Replace(folderDataPath + @"\", "")} to {resultFileName}.txt");
-
+                    Parameters.ResultFilePath = folderOutputFilePath + $@"\{resultFileName}.txt";
                 });
             }
             Console.WriteLine("Merged sucesfully!");

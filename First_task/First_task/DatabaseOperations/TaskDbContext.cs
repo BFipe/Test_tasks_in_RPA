@@ -10,10 +10,15 @@ namespace First_task.DatabaseOperations
 {
     public class TaskDbContext : DbContext
     {
+        public TaskDbContext(string connectionString)
+        {
+            Parameters.ConnectionString = connectionString;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //String-connection to MSSQL Database
-            optionsBuilder.UseSqlServer("Server=localhost;Database=Task1;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(Parameters.ConnectionString);
         }
 
         //Our table with data

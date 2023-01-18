@@ -1,4 +1,5 @@
-﻿using System;
+﻿using First_task.DatabaseOperations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -174,7 +175,7 @@ namespace First_task
             while (isTaskRunning)
             {
                 anwser = Console.ReadLine();
-                if (String.IsNullOrEmpty(anwser))
+                if (String.IsNullOrEmpty(anwser) && String.IsNullOrEmpty(Parameters.FolderDataPath) == false)
                 {
                     inputPath = Parameters.FolderDataPath;
                     isTaskRunning = false;
@@ -196,7 +197,7 @@ namespace First_task
             while (isTaskRunning)
             {
                 anwser = Console.ReadLine();
-                if (String.IsNullOrEmpty(anwser))
+                if (String.IsNullOrEmpty(anwser) && String.IsNullOrEmpty(Parameters.FolderDataPath) == false)
                 {
                     outputPath = Parameters.FolderDataPath;
                     isTaskRunning = false;
@@ -255,6 +256,103 @@ namespace First_task
         private static void Merge()
         {
             MergeFiles.MergeFilesInParallel(Parameters.FolderDataPath, Parameters.FolderOutputPath, Parameters.ResultFileName, Parameters.FilterString);
+        }
+
+        public async static Task PushData(Database database)
+        {
+            if (String.IsNullOrEmpty(Parameters.ResultFilePath))
+            {
+                ChangePushParameters();
+                await PushDataIntoDB(database);
+            }
+            else
+            {
+                Parameters.TxtFilePath = Parameters.ResultFilePath;
+                Console.Clear();
+                Console.WriteLine("Use this parameters? y/n");
+                Console.WriteLine($".txt File path - {Parameters.TxtFilePath}");
+                Console.WriteLine($"Connection string - {Parameters.ConnectionString} [Non-changable during the application]");
+
+
+                string anwser = string.Empty;
+                bool isTaskRunning = true;
+                while (isTaskRunning)
+                {
+                    anwser = Console.ReadLine();
+                    switch (anwser)
+                    {
+                        case "y":
+
+                            PushDataIntoDB(database);
+                            isTaskRunning = false;
+                            continue;
+                        case "n":
+                            ChangePushParameters();
+                            PushDataIntoDB(database);
+                            isTaskRunning = false;
+                            continue;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static void ChangePushParameters()
+        {
+            string txtFilePath = string.Empty;
+            bool isTaskRunning = true;
+            string anwser = String.Empty;
+
+            Console.WriteLine("Enter the path to .txt string you want to merge or just press enter to use path for previously generated result file");
+            while (isTaskRunning)
+            {
+                anwser = Console.ReadLine().Trim();
+                if (String.IsNullOrEmpty(anwser) && String.IsNullOrEmpty(Parameters.ResultFilePath) == false)
+                {
+                    txtFilePath = Parameters.ResultFilePath;
+                    isTaskRunning = false;
+                }
+                else if (Path.GetExtension(anwser) == ".txt")
+                {
+                    txtFilePath = anwser;
+                    isTaskRunning = false;
+                }
+                else
+                {
+                    Console.WriteLine("The path is incorrect or not a .txt file.");
+                }
+            }
+
+            Console.WriteLine("Check data, press any key to continue or type \"change\" to change data again");
+            Console.WriteLine($".txt File path - {txtFilePath}");
+
+            anwser = Console.ReadLine();
+            if (anwser == "change")
+            {
+                Console.Clear();
+                ChangePushParameters();
+            }
+            else
+            {
+                Parameters.TxtFilePath = txtFilePath;
+            }
+        }
+
+        private async static Task PushDataIntoDB(Database database)
+        {
+            await database.AddDataFromTxt(Parameters.TxtFilePath);
+        }
+
+        public static void GetSum(Database database)
+        {
+            Console.WriteLine(database.AllIntegerSum());
+        }
+
+        public static void GetMedian(Database database)
+        {
+            Console.WriteLine(database.DoubleMedian());
         }
     }
 }

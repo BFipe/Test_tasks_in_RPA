@@ -1,5 +1,6 @@
 ﻿using First_task.DatabaseOperations;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace First_task
 {
@@ -7,27 +8,48 @@ namespace First_task
     {
         static async Task Main(string[] args)
         {
-            //var timer = new Stopwatch();
-            //timer.Start();
-            //FileGenerator.GenerateFilesInParallel(Parameters.TextFilesNumber, Parameters.TextRowsNumber, Parameters.FolderDataPath);
-            //timer.Stop();
-            //TimeSpan timeTaken = timer.Elapsed;
-            //Console.WriteLine("Time taken creating files: " + timeTaken.ToString(@"m\:ss\.fff"));
+            bool isExit = true;
+            string anwser = string.Empty;
 
-            //timer.Restart();
-            //MergeFiles.MergeFilesInParallel(Parameters.FolderDataPath, Parameters.FolderDataPath, "");
-            //timer.Stop();
-            //timeTaken = timer.Elapsed;
-            //Console.WriteLine("Time taken merging: " + timeTaken.ToString(@"m\:ss\.fff"));
-            //timer.Restart();
-            Database db = new();
-            Console.WriteLine(db.AllIntegerSum());
-            Console.WriteLine(db.DoubleMedian());
-            //await db.AddDataFromTxt(@"D:\Рабочий стол\Visual Studio\TesterFolder\result.txt");
-            //timer.Stop();
-            //timeTaken = timer.Elapsed;
-            //Console.WriteLine("Time taken adding result data to database: " + timeTaken.ToString(@"m\:ss\.fff"));
+            while (isExit)
+            {
+                Console.WriteLine("Select the operation (enter 1-5 to select operation or type \"exit\" to exit)");
+                Console.WriteLine("1. Generate files");
+                Console.WriteLine("2. Merge files");
+                Console.WriteLine("3. Send data to the database");
+                Console.WriteLine("4. Find summ of all integers");
+                Console.WriteLine("5. Find median of all decimals");
+                Console.WriteLine("-----------------------------------------------------------------");
+                anwser = Console.ReadLine();
+                switch (anwser)
+                {
+                    case "1":
+                        ConsoleMethods.GenerateFiles();
+                        ConsoleMethods.PressAnyKey();
+                        break;
 
+                    case "2":
+                        ConsoleMethods.MergeFilesProcedure();
+                        ConsoleMethods.PressAnyKey();
+                        break;
+
+                    case "3":
+                        break;
+
+                    case "4":
+                        break;
+
+                    case "5":
+                        break;
+
+                    case "exit":
+                        return;
+
+                    default:
+                        break;
+                }
+                Console.Clear();
+            }
         }
     }
 }

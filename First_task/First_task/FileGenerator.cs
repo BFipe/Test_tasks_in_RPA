@@ -17,11 +17,13 @@ namespace First_task
             object lockObj = new object();
             if (!Directory.Exists(folderPath))
             {
-                Directory.CreateDirectory(folderPath);
+                Console.WriteLine("Incorrect folder path");
+                return;
             }
             Parallel.For(0, textFilesNumber, i =>
             {
                 string fileName = i + ".txt";
+                Console.WriteLine($"{fileName} -> start generating");
                 using (StreamWriter sw = new StreamWriter(folderPath + @$"\{fileName}"))
                 {
                     StringBuilder sb = new StringBuilder();
@@ -37,6 +39,7 @@ namespace First_task
                         sw.Write(sb.ToString());
                     }
                 }
+                Console.WriteLine($"{fileName} -> sucsesfully created");
             });
         }
 

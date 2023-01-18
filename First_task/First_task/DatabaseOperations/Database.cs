@@ -79,13 +79,13 @@ namespace First_task.DatabaseOperations
         public decimal DoubleMedian()
         {
             var decimalNumbers = _dbContext.TableEntities.Select(q => q.DecimalNumber).OrderBy(q => q).ToList();
-            if (decimalNumbers.Count() % 2 == 1)
+            if (decimalNumbers.Count % 2 == 1)
             {
-                return decimalNumbers[(decimalNumbers.Count() / 2 + 1)];
+                return decimalNumbers[(decimalNumbers.Count / 2 + 1)];
             }
             else
             {
-                return (decimalNumbers[(decimalNumbers.Count() / 2)] + decimalNumbers[(decimalNumbers.Count() / 2 - 1)]) / 2;
+                return (decimalNumbers[(decimalNumbers.Count / 2)] + decimalNumbers[(decimalNumbers.Count / 2 - 1)]) / 2;
             }
         }
     }

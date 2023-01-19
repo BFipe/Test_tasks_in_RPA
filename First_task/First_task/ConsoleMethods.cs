@@ -283,12 +283,12 @@ namespace First_task
                     {
                         case "y":
 
-                            PushDataIntoDB(database);
+                            await PushDataIntoDB(database);
                             isTaskRunning = false;
                             continue;
                         case "n":
                             ChangePushParameters();
-                            PushDataIntoDB(database);
+                            await PushDataIntoDB(database);
                             isTaskRunning = false;
                             continue;
 

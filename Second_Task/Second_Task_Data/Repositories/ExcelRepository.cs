@@ -1,4 +1,5 @@
-﻿using Second_Task_Data.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Second_Task_Data.Interfaces;
 using Second_Task_Entities.ExcelEntities;
 using System;
 using System.Collections.Generic;
@@ -22,16 +23,6 @@ namespace Second_Task_Data.Repositories
             await _dbContext.AddAsync(excelFile);
         }
 
-        public Task<ExcelFile> GetExcelFile()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveExcelFile(string excelFileName)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task SaveDatabase()
         {
             await _dbContext.SaveChangesAsync();
@@ -45,6 +36,16 @@ namespace Second_Task_Data.Repositories
         public List<ExcelFile> GetExcelFilesInfo()
         {
             return _dbContext.ExcelFiles.ToList();
+        }
+
+        public Task<ExcelFile> GetExcelFile(string fileId)
+        {
+            return _dbContext.ExcelFiles.SingleOrDefaultAsync(q => q.ExcelFileId == fileId);
+        }
+
+        public void RemoveExcelFile(ExcelFile excelFile)
+        {
+            _dbContext.ExcelFiles.Remove(excelFile);
         }
     }
 }

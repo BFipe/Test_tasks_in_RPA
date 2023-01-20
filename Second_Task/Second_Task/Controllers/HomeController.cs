@@ -9,26 +9,16 @@ namespace Second_Task.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IExcelReader _excelReader;
+        private readonly IExcelManager _excelManager;
         private readonly IFileManager _fileManager;
 
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, IExcelReader excelReader, IFileManager fileManager)
+        public HomeController(ILogger<HomeController> logger, IExcelManager excelManager, IFileManager fileManager)
         {
             _logger = logger;
-            _excelReader = excelReader;
+            _excelManager = excelManager;
             _fileManager = fileManager;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> Privacy()
-        {
-            return View();
         }
 
         public async Task<IActionResult> FileManagement()
@@ -45,7 +35,7 @@ namespace Second_Task.Controllers
             {
                 //Get info about files in folder (Name and if file with the same name is already in the database)
                 fileViewModel.FileEntities = _fileManager.GetFolderFileEntities();
-                fileViewModel.DbFiles = _excelReader.GetFilesInfo();
+                fileViewModel.DbFiles = _excelManager.GetFilesInfo();
             }
             catch (Exception ex)
             {
@@ -115,6 +105,20 @@ namespace Second_Task.Controllers
             }
             return RedirectToAction("FileManagement");
         }
+
+        public async Task<IActionResult> DeleteFileFromDatabase(string fileId)
+        {
+            try
+            {
+                await _excelManager.DeleteFile(fileId);
+            }
+            catch (Exception ex)
+            {
+                TempData["Exception"] = ex.Message;
+            }
+            return RedirectToAction("FileManagement");
+        }
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

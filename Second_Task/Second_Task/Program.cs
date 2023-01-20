@@ -17,7 +17,7 @@ namespace Second_Task
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
-            builder.Services.AddScoped<IExcelReader, ExcelReader>();
+            builder.Services.AddScoped<IExcelManager, ExcelManager>();
             builder.Services.AddScoped<IExcelRepository, ExcelRepository>();
             builder.Services.AddScoped<IFileManager, FileManager>();
             builder.Services.AddTransient<DbContext, ApplicationDbContext>();
@@ -44,7 +44,7 @@ namespace Second_Task
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=FileManagement}/{id?}");
 
             app.Run();
         }

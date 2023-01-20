@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace Second_Task_BusinessLayer.Services
 {
-    public class ExcelReader : IExcelReader
+    public class ExcelManager : IExcelManager
     {
         private const string ClassNamePattern = @"^(?i)класс\s+\d+.*";
         private const string AccountGroupNamePattern = @"^\d{2}$";
         private readonly IExcelRepository _excelRepository;
 
-        public ExcelReader(IExcelRepository excelRepository)
+        public ExcelManager(IExcelRepository excelRepository)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             _excelRepository = excelRepository;
@@ -47,7 +47,7 @@ namespace Second_Task_BusinessLayer.Services
 
         public async Task ReadFile(string xlsxFilePath)
         {
-            if (File.Exists(xlsxFilePath) == false || Path.GetExtension(xlsxFilePath) != ".xlsx") throw new Exception($"Path {xlsxFilePath} isn't correct or not a .xlsx file");
+            if (File.Exists(xlsxFilePath) == false ||Path.GetExtension(xlsxFilePath) != ".xlsx") throw new Exception($"Path {xlsxFilePath} isn't correct or not a .xlsx file");
 
             using (var reader = new ExcelPackage(new FileInfo(xlsxFilePath)))
             {
@@ -94,6 +94,9 @@ namespace Second_Task_BusinessLayer.Services
                     }
                 }
 
+                //Validating file
+                ValidateFile(excelFile.ExcelClasses, worksheet);
+
                 excelFile.ExcelClasses.ForEach(excelClass =>
                 {
                     for (int row = excelClass.StartingValuesRow; row <= excelClass.EndingValuesRow; row++)
@@ -125,18 +128,25 @@ namespace Second_Task_BusinessLayer.Services
                     {
                         for (int row = excelAccountGroup.StartingValuesRow; row <= excelAccountGroup.EndingValuesRow; row++)
                         {
-                            int accountingValue = int.Parse(worksheet.Cells[row, 1].Text);
-                            double activeAccountOpeningBalance = double.Parse(worksheet.Cells[row, 2].Text);
-                            double passiveAccountOpeningBalance = double.Parse(worksheet.Cells[row, 3].Text);
-                            double debitAccountNegotiableBalance = double.Parse(worksheet.Cells[row, 4].Text);
-                            double creditAccountNegotiableBalance = double.Parse(worksheet.Cells[row, 5].Text);
-                            double debitAccountOutgoingBalance = double.Parse(worksheet.Cells[row, 6].Text);
-                            double creditAccountOutgoingBalance = double.Parse(worksheet.Cells[row, 7].Text);
-                            ExcelAccount excelAccount = new ExcelAccount(accountingValue, activeAccountOpeningBalance, passiveAccountOpeningBalance, debitAccountNegotiableBalance, creditAccountNegotiableBalance, debitAccountOutgoingBalance, creditAccountOutgoingBalance)
+                            try
                             {
-                                ExcelAccountId = Guid.NewGuid().ToString(),
-                            };
-                            excelAccountGroup.ExcelAccounts.Add(excelAccount);
+                                int accountingValue = int.Parse(worksheet.Cells[row, 1].Text);
+                                double activeAccountOpeningBalance = double.Parse(worksheet.Cells[row, 2].Text);
+                                double passiveAccountOpeningBalance = double.Parse(worksheet.Cells[row, 3].Text);
+                                double debitAccountNegotiableBalance = double.Parse(worksheet.Cells[row, 4].Text);
+                                double creditAccountNegotiableBalance = double.Parse(worksheet.Cells[row, 5].Text);
+                                double debitAccountOutgoingBalance = double.Parse(worksheet.Cells[row, 6].Text);
+                                double creditAccountOutgoingBalance = double.Parse(worksheet.Cells[row, 7].Text);
+                                ExcelAccount excelAccount = new ExcelAccount(accountingValue, activeAccountOpeningBalance, passiveAccountOpeningBalance, debitAccountNegotiableBalance, creditAccountNegotiableBalance, debitAccountOutgoingBalance, creditAccountOutgoingBalance)
+                                {
+                                    ExcelAccountId = Guid.NewGuid().ToString(),
+                                };
+                                excelAccountGroup.ExcelAccounts.Add(excelAccount);
+                            }
+                            catch (Exception)
+                            {
+                                throw new Exception($"There is some issues trying to parce data from the file (Row:{row})");
+                            }
                         }
 
                         //Calculating sum of all ExcelAccounts
@@ -166,12 +176,12 @@ namespace Second_Task_BusinessLayer.Services
                 });
 
                 //Calculating sum of all ExcelFile
-                excelFile.TotalActiveOpeningBalance = Math.Round( excelFile.ExcelClasses.Sum(q => q.TotalActiveClassOpeningBalance), 2, MidpointRounding.AwayFromZero);
-                excelFile.TotalPassiveOpeningBalance = Math.Round( excelFile.ExcelClasses.Sum(q => q.TotalPassiveClassOpeningBalance), 2, MidpointRounding.AwayFromZero);
-                excelFile.TotalDebitNegotiableBalance = Math.Round( excelFile.ExcelClasses.Sum(q => q.TotalDebitClassNegotiableBalance), 2, MidpointRounding.AwayFromZero);
-                excelFile.TotalCreditNegotiableBalance = Math.Round( excelFile.ExcelClasses.Sum(q => q.TotalCreditClassNegotiableBalance), 2, MidpointRounding.AwayFromZero);
-                excelFile.TotalActiveOutgoingBalance = Math.Round( excelFile.ExcelClasses.Sum(q => q.TotalActiveClassOutgoingBalance), 2, MidpointRounding.AwayFromZero);
-                excelFile.TotalPassiveOutgoingBalance = Math.Round( excelFile.ExcelClasses.Sum(q => q.TotalPassiveClassOutgoingBalance), 2, MidpointRounding.AwayFromZero);
+                excelFile.TotalActiveOpeningBalance = Math.Round(excelFile.ExcelClasses.Sum(q => q.TotalActiveClassOpeningBalance), 2, MidpointRounding.AwayFromZero);
+                excelFile.TotalPassiveOpeningBalance = Math.Round(excelFile.ExcelClasses.Sum(q => q.TotalPassiveClassOpeningBalance), 2, MidpointRounding.AwayFromZero);
+                excelFile.TotalDebitNegotiableBalance = Math.Round(excelFile.ExcelClasses.Sum(q => q.TotalDebitClassNegotiableBalance), 2, MidpointRounding.AwayFromZero);
+                excelFile.TotalCreditNegotiableBalance = Math.Round(excelFile.ExcelClasses.Sum(q => q.TotalCreditClassNegotiableBalance), 2, MidpointRounding.AwayFromZero);
+                excelFile.TotalActiveOutgoingBalance = Math.Round(excelFile.ExcelClasses.Sum(q => q.TotalActiveClassOutgoingBalance), 2, MidpointRounding.AwayFromZero);
+                excelFile.TotalPassiveOutgoingBalance = Math.Round(excelFile.ExcelClasses.Sum(q => q.TotalPassiveClassOutgoingBalance), 2, MidpointRounding.AwayFromZero);
 
                 //Calculating sum for calculated fields
                 excelFile.ActualTotalActiveOutgoingBalance = Math.Round(excelFile.ExcelClasses.Sum(q => q.ActualTotalActiveClassOutgoingBalance), 2, MidpointRounding.AwayFromZero);
@@ -183,8 +193,35 @@ namespace Second_Task_BusinessLayer.Services
             };
         }
 
+        //This method validates .xlsx
+        private void ValidateFile(List<ExcelClass> excelClasses, ExcelWorksheet worksheet)
+        {
+            if (excelClasses.Any() == false) throw new Exception("File does not contains valid data for this application");
+            try
+            {
+                //Trying to parse data from the first row
+                var excelClass = excelClasses.First();
+                double.Parse(worksheet.Cells[excelClass.StartingValuesRow, 2].Text);
+                double.Parse(worksheet.Cells[excelClass.StartingValuesRow, 3].Text);
+                double.Parse(worksheet.Cells[excelClass.StartingValuesRow, 4].Text);
+                double.Parse(worksheet.Cells[excelClass.StartingValuesRow, 5].Text);
+                double.Parse(worksheet.Cells[excelClass.StartingValuesRow, 6].Text);
+                double.Parse(worksheet.Cells[excelClass.StartingValuesRow, 7].Text);
+            }
+            catch (Exception)
+            {
+                throw new Exception("File does not contains valid data for this application");
+            }
+        }
 
+        public async Task DeleteFile(string fileId)
+        {
+            var file = await _excelRepository.GetExcelFile(fileId);
+            if (file == null) throw new Exception($"Database does not contains file with id {fileId}");
 
+            _excelRepository.RemoveExcelFile(file);
+            await _excelRepository.SaveDatabase();
+        }
     }
 }
 

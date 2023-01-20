@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace Second_Task_BusinessLayer.Interfaces
 {
-    public interface IExcelReader
+    public interface IExcelManager
     {
         public Task ReadFile(string xlsxFilePath);
 
         public List<DbFileInfo> GetFilesInfo();
         public Task<ExcelFile> GetFileData();
+        public Task DeleteFile(string fileId);
     }
 }

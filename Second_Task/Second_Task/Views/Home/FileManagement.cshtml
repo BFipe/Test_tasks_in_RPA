@@ -1,6 +1,6 @@
 ﻿@model FileViewModel
 
-<div class="d-flex justify-content-center align-items-baseline">
+<div class="d-flex justify-content-center align-items-baseline" style="margin-top: 100px">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png" style="width: 96px;margin-bottom: 7px;" />
 </div>
 
@@ -121,7 +121,7 @@ else
 
                                 <td class="d-flex justify-content-center align-items-center">
 
-                                    <form action="/Home/ViewDatabaseFile" method="post">
+                                    <form action="/Home/DeleteFileFromDatabase" method="post">
                                         <input hidden name="fileId" value="@file.ExcelFileId">
                                         <button class="btn btn-primary btn-sm d-flex justify-content-center align-items-center" type="submit" style="background: rgb(243,27,27);height: 32px;width: 32px;border-width: 0px;border-radius: 10px;">
                                             <svg class="bi bi-x-lg" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(0,0,0);">

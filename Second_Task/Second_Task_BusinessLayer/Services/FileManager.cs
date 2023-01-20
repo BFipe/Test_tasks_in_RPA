@@ -12,9 +12,9 @@ namespace Second_Task_BusinessLayer.Services
     public class FileManager : IFileManager
     {
         private readonly IExcelRepository _excelRepository;
-        private readonly IExcelReader _excelReader;
+        private readonly IExcelManager _excelReader;
 
-        public FileManager(IExcelRepository excelRepository, IExcelReader excelReader)
+        public FileManager(IExcelRepository excelRepository, IExcelManager excelReader)
         {
             _excelRepository = excelRepository;
             _excelReader = excelReader;

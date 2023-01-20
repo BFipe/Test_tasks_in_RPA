@@ -31,23 +31,27 @@ namespace Second_Task.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AddFileToDatabase()
+        public async Task<IActionResult> FileManagement()
         {
-            FolderFileViewModel folderFileViewModel = new();
+            FileViewModel fileViewModel = new();
+
+            //Getting exception messages
             if (TempData["Exception"] != null)
             {
-                folderFileViewModel.Errors.Add(TempData["Exception"].ToString());
+                fileViewModel.Errors.Add(TempData["Exception"].ToString());
             }
 
             try
             {
-                folderFileViewModel.FileEntities = _fileManager.GetFolderFileEntities();
+                //Get info about files in folder (Name and if file with the same name is already in the database)
+                fileViewModel.FileEntities = _fileManager.GetFolderFileEntities();
+                fileViewModel.DbFiles = _excelReader.GetFilesInfo();
             }
             catch (Exception ex)
             {
-                folderFileViewModel.Errors.Add(ex.Message);
+                fileViewModel.Errors.Add(ex.Message);
             }
-            return View(folderFileViewModel);
+            return View(fileViewModel);
         }
 
         [HttpPost]
@@ -55,18 +59,23 @@ namespace Second_Task.Controllers
         {
             if (file != null && file.Length > 0)
             {
-                string fileName = file.FileName;
-                byte[] fileBytes;
                 try
                 {
+                    //Check if file is .xsls type
+
+                    string fileName = file.FileName;
                     if (Regex.IsMatch(fileName, @"^.*[^xlsx]xlsx$") == false) throw new Exception("Incorrect file type");
 
+                    byte[] fileBytes;
+
+                    //Converting to byte massive
                     using (var ms = new MemoryStream())
                     {
                         file.CopyTo(ms);
                         fileBytes = ms.ToArray();
                     }
 
+                    //Saving procedure
                     _fileManager.SaveXslxInFolder(fileBytes, fileName);
                 }
                 catch (Exception ex)
@@ -74,27 +83,37 @@ namespace Second_Task.Controllers
                     TempData["Exception"] = ex.Message;
                 }
             }
-            return RedirectToAction("AddFileToDatabase");
+            return RedirectToAction("FileManagement");
         }
 
         [HttpPost]
-        public IActionResult PushFileIntoDatabase()
+        public async Task<IActionResult> PushFileIntoDatabase(string fileName)
         {
-            return RedirectToAction("AddFileToDatabase");
+            try
+            {
+                await _fileManager.PushFileIntoDatabase(fileName);
+            }
+            catch (Exception ex)
+            {
+                TempData["Exception"] = ex.Message;
+            }
+
+            return RedirectToAction("FileManagement");
         }
-        
+
         [HttpPost]
         public IActionResult DeleteFileFromFolder(string fileName)
         {
             try
             {
+                //Deleting fole by its name
                 _fileManager.DeleteFile(fileName);
             }
             catch (Exception ex)
             {
                 TempData["Exception"] = ex.Message;
             }
-            return RedirectToAction("AddFileToDatabase");
+            return RedirectToAction("FileManagement");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

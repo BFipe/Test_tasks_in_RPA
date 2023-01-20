@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using Second_Task_BusinessLayer.Dtos;
 using Second_Task_BusinessLayer.Interfaces;
 using Second_Task_Data.Interfaces;
 using Second_Task_Entities.ExcelEntities;
@@ -21,6 +22,27 @@ namespace Second_Task_BusinessLayer.Services
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             _excelRepository = excelRepository;
+        }
+
+        public Task<ExcelFile> GetFileData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DbFileInfo> GetFilesInfo()
+        {
+            var info = _excelRepository.GetExcelFilesInfo();
+            List<DbFileInfo> dbFileInfos = new();
+            info.ForEach(data =>
+            {
+                DbFileInfo dbFileInfo = new DbFileInfo()
+                {
+                    ExcelFileId = data.ExcelFileId,
+                    ExcelFileName = data.ExcelFileName
+                };
+                dbFileInfos.Add(dbFileInfo);
+            });
+            return dbFileInfos;
         }
 
         public async Task ReadFile(string xlsxFilePath)
@@ -143,6 +165,7 @@ namespace Second_Task_BusinessLayer.Services
                     excelClass.ActualTotalPassiveClassOutgoingBalance = Math.Round(excelClass.ExcelAccountGroups.Sum(q => q.ActualTotalPassiveAccountOutgoingBalance), 2, MidpointRounding.AwayFromZero);
                 });
 
+                //Calculating sum of all ExcelFile
                 excelFile.TotalActiveOpeningBalance = Math.Round( excelFile.ExcelClasses.Sum(q => q.TotalActiveClassOpeningBalance), 2, MidpointRounding.AwayFromZero);
                 excelFile.TotalPassiveOpeningBalance = Math.Round( excelFile.ExcelClasses.Sum(q => q.TotalPassiveClassOpeningBalance), 2, MidpointRounding.AwayFromZero);
                 excelFile.TotalDebitNegotiableBalance = Math.Round( excelFile.ExcelClasses.Sum(q => q.TotalDebitClassNegotiableBalance), 2, MidpointRounding.AwayFromZero);
@@ -159,6 +182,9 @@ namespace Second_Task_BusinessLayer.Services
                 await _excelRepository.SaveDatabase();
             };
         }
+
+
+
     }
 }
 

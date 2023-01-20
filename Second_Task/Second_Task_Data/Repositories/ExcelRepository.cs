@@ -41,5 +41,10 @@ namespace Second_Task_Data.Repositories
         {
             return _dbContext.ExcelFiles.Select(q => q.ExcelFileName).ToList();
         }
+
+        public List<ExcelFile> GetExcelFilesInfo()
+        {
+            return _dbContext.ExcelFiles.ToList();
+        }
     }
 }

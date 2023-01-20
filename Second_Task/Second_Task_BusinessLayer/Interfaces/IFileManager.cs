@@ -14,5 +14,7 @@ namespace Second_Task_BusinessLayer.Interfaces
         public List<FolderFileEntity> GetFolderFileEntities();
 
         public void DeleteFile(string fileName);
+
+        public Task PushFileIntoDatabase(string fileName);
     }
 }

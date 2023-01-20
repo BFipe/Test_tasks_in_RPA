@@ -1,4 +1,4 @@
-﻿@model FolderFileViewModel
+﻿@model FileViewModel
 
 <div class="d-flex justify-content-center align-items-baseline">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png" style="width: 96px;margin-bottom: 7px;" />
@@ -60,9 +60,9 @@ else
                             else
                             {
                                 <td style="text-align: center; border-width: 0px;">
-                                    <button class="btn btn-primary btn-sm" type="button" style="background: rgb(158,0,255);height: 32px;width: 125px;border: none;">
-                                        View in database
-                                    </button>
+                                    <button class="btn btn-primary btn-sm disabled" type="button" style="background: rgb(88,157,87);height: 32px;width: 120px; border: none;" disabled>
+                                        In the database
+                                        </button>
                                 </td>
                             }
 
@@ -85,3 +85,57 @@ else
         </div>
     </div>
 }
+
+
+    <h1 style="margin-top: 50px;text-align: center;">
+        Your database files
+    </h1>
+
+    @if (Model.DbFiles.Any() == false)
+    {
+        <p style="text-align: center;color: rgb(0,0,0);font-size: 22px;">You currently have no database files.<br /></p>
+    }
+
+    else
+    {
+        <div class="d-flex justify-content-center">
+            <div class="table-responsive" style="border-width: 6px;">
+                <table class="table">
+                    <tbody>
+                        @foreach (var file in Model.DbFiles)
+                        {
+                            <tr>
+                                <td style="border-width: 0px;">
+                                    <img src="https://www.freeiconspng.com/thumbs/sql-server-icon-png/sql-server-icon-8.png" style="width: 31px;margin-right: 5px;" width="31" height="29" />
+                                    @file.ExcelFileName
+                                </td>
+
+                                <td style="text-align: center;">
+                                    <form action="/Home/ViewDatabaseFile" method="post">
+                                        <input hidden name="fileId" value="@file.ExcelFileId">
+                                        <button class="btn btn-primary btn-sm" type="submit" style="background: rgb(158,0,255);height: 32px;width: 55px;border-width: 0px;">
+                                            View
+                                        </button>
+                                    </form>
+                                </td>
+
+                                <td class="d-flex justify-content-center align-items-center">
+
+                                    <form action="/Home/ViewDatabaseFile" method="post">
+                                        <input hidden name="fileId" value="@file.ExcelFileId">
+                                        <button class="btn btn-primary btn-sm d-flex justify-content-center align-items-center" type="submit" style="background: rgb(243,27,27);height: 32px;width: 32px;border-width: 0px;border-radius: 10px;">
+                                            <svg class="bi bi-x-lg" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(0,0,0);">
+                                                <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"></path>
+                                                <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }

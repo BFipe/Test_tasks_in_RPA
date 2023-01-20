@@ -12,10 +12,12 @@ namespace Second_Task_BusinessLayer.Services
     public class FileManager : IFileManager
     {
         private readonly IExcelRepository _excelRepository;
+        private readonly IExcelReader _excelReader;
 
-        public FileManager(IExcelRepository excelRepository)
+        public FileManager(IExcelRepository excelRepository, IExcelReader excelReader)
         {
             _excelRepository = excelRepository;
+            _excelReader = excelReader;
         }
 
         //Saving file in wwwroot path
@@ -33,12 +35,15 @@ namespace Second_Task_BusinessLayer.Services
         public List<FolderFileEntity> GetFolderFileEntities()
         {
             List<string> dbFileNames = _excelRepository.GetExcelFileNames();
+
+            //Getting all file's names from the ExcelFiles folder
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ExcelFiles");
             List<string> fileNames = Directory.GetFiles(folderPath).ToList();
 
             List<FolderFileEntity> folderFileEntities = new();
             fileNames.ForEach(file =>
             {
+                //Creating folder file entity and checking if it already in the database
                 var fileName = (file.Replace(folderPath + @"\", ""));
 
                 FolderFileEntity folderFileEntity = new FolderFileEntity()
@@ -55,10 +60,26 @@ namespace Second_Task_BusinessLayer.Services
 
         public void DeleteFile(string fileName)
         {
+            //Select file from ~/wwwroot/ExcelFiles by it's name
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ExcelFiles", fileName);
+
+            //Checking is this file exists in that 
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
+            }
+            else
+            {
+                throw new Exception($"File {fileName} not found");
+            }
+        }
+
+        public async Task PushFileIntoDatabase(string fileName)
+        {
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ExcelFiles", fileName);
+            if (File.Exists(filePath))
+            {
+                await _excelReader.ReadFile(filePath);
             }
             else
             {

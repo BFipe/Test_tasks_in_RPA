@@ -8,9 +8,6 @@ namespace Second_Task_BusinessLayer.Interfaces
 {
     public interface IFileManager
     {
-        public void ReadFile(string filePath)
-        {
-
-        }
+        public void SaveXslxInFolder(byte[] file, string fileName);
     }
 }

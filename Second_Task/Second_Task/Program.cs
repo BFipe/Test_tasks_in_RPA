@@ -15,6 +15,7 @@ namespace Second_Task
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
             builder.Services.AddScoped<IExcelReader, ExcelReader>();
             builder.Services.AddScoped<IExcelRepository, ExcelRepository>();

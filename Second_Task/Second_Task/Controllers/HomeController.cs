@@ -2,6 +2,7 @@
 using Second_Task.Models;
 using Second_Task_BusinessLayer.Interfaces;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Second_Task.Controllers
 {
@@ -26,8 +27,42 @@ namespace Second_Task.Controllers
 
         public async Task<IActionResult> Privacy()
         {
-            await _excelReader.ReadFile(@"D:\Рабочий стол\Visual Studio\Test_tasks_in_RPA\Second_Task\Second_Task\wwwroot\ExcelFiles\DemoExcel.xlsx");
             return View();
+        }
+
+        public async Task<IActionResult> AddFileToDatabase()
+        {
+            if (TempData["Exception"] != null)
+            {
+                ViewData["Exception"] = TempData["Exception"];
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddFile([FromForm(Name = "file")] IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                string fileName = file.FileName;
+                byte[] fileBytes;
+                try
+                {
+                    if (Regex.IsMatch(fileName, @"^.*[^xlsx]xlsx$") == false) throw new Exception("Incorrect file type");
+                    using (var ms = new MemoryStream())
+                    {
+                        file.CopyTo(ms);
+                        fileBytes = ms.ToArray();
+                    }
+
+                    _fileManager.SaveXslxInFolder(fileBytes, fileName);
+                }
+                catch (Exception ex)
+                {
+                    TempData["Exception"] = ex.Message;
+                }
+            }
+            return RedirectToAction("AddFileToDatabase");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Second_Task.Models;
+using Second_Task.Models.FileModels;
 using Second_Task_BusinessLayer.Interfaces;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -32,11 +33,21 @@ namespace Second_Task.Controllers
 
         public async Task<IActionResult> AddFileToDatabase()
         {
+            FolderFileViewModel folderFileViewModel = new();
             if (TempData["Exception"] != null)
             {
-                ViewData["Exception"] = TempData["Exception"];
+                folderFileViewModel.Errors.Add(TempData["Exception"].ToString());
             }
-            return View();
+
+            try
+            {
+                folderFileViewModel.FileEntities = _fileManager.GetFolderFileEntities();
+            }
+            catch (Exception ex)
+            {
+                folderFileViewModel.Errors.Add(ex.Message);
+            }
+            return View(folderFileViewModel);
         }
 
         [HttpPost]
@@ -49,6 +60,7 @@ namespace Second_Task.Controllers
                 try
                 {
                     if (Regex.IsMatch(fileName, @"^.*[^xlsx]xlsx$") == false) throw new Exception("Incorrect file type");
+
                     using (var ms = new MemoryStream())
                     {
                         file.CopyTo(ms);
@@ -61,6 +73,26 @@ namespace Second_Task.Controllers
                 {
                     TempData["Exception"] = ex.Message;
                 }
+            }
+            return RedirectToAction("AddFileToDatabase");
+        }
+
+        [HttpPost]
+        public IActionResult PushFileIntoDatabase()
+        {
+            return RedirectToAction("AddFileToDatabase");
+        }
+        
+        [HttpPost]
+        public IActionResult DeleteFileFromFolder(string fileName)
+        {
+            try
+            {
+                _fileManager.DeleteFile(fileName);
+            }
+            catch (Exception ex)
+            {
+                TempData["Exception"] = ex.Message;
             }
             return RedirectToAction("AddFileToDatabase");
         }

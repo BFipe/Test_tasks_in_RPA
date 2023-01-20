@@ -1,4 +1,4 @@
-﻿
+﻿@model FolderFileViewModel
 
 <div class="d-flex justify-content-center align-items-baseline">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png" style="width: 96px;margin-bottom: 7px;" />
@@ -6,57 +6,82 @@
 
 <form action="/Home/AddFile" method="post" class="d-flex justify-content-center" enctype="multipart/form-data">
     <input required name="file" type="file" accept=".xlsx" style="box-shadow: 2px 2px rgba(33,37,41,0.32);border: 5px solid rgb(47,197,130);border-radius: 12px;color: rgb(0,0,0);font-size: 18px;" />
-    <button class="btn btn-primary" type="submit" style="margin-left: 9px;background: rgb(27,164,102);box-shadow: 2px 2px rgba(33,37,41,0.32);border-radius: 8px;">
+    <button class="btn btn-primary" type="submit" style="margin-left: 9px;background: rgb(27,164,102);box-shadow: 2px 2px rgba(33,37,41,0.32);border-radius: 8px; border: none;">
         Submit
     </button>
 </form>
 
 
-
-<h4 style="text-align: center;color: rgb(190,11,0);">
-    @ViewData["Exception"]
-</h4>
+@foreach (var error in Model.Errors)
+{
+    <h4 style="text-align: center;color: rgb(190,11,0);">
+        @error
+    </h4>
+}
 
 
 <h1 style="margin-top: 50px;text-align: center;">
     Your files
 </h1>
 
-<p style="text-align: center;color: rgb(0,0,0);font-size: 22px;">
-    You currently have no files.
-    <br />
-    Submit them by using the form above!
-</p>
+@if (Model.FileEntities.Any() == false)
+{
+    <p style="text-align: center;color: rgb(0,0,0);font-size: 22px;">
+        You currently have no files.
+        <br />
+        Submit them by using the form above!
+    </p>
+}
+else
+{
+    <div class="d-flex justify-content-center">
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    @foreach (var file in Model.FileEntities)
+                    {
+                        <tr>
+                            <td style="border-width: 0px;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png" style="width: 31px;margin-right: 5px;" width="31" height="29" />
+                                @file.Name
+                            </td>
 
-<div class="d-flex justify-content-center">
-    <div class="table-responsive">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png" style="width: 31px;margin-right: 5px;" width="31" height="29" />name.xlsx</td>
-                    <td style="text-align: center;"><button class="btn btn-primary btn-sm" type="button" style="background: rgb(27,48,243);height: 32px;width: 120px;">Add to database</button></td>
-                    <td class="d-flex justify-content-center align-items-center">
-                        <button class="btn btn-primary btn-sm d-flex justify-content-center align-items-center" type="button" style="background: rgb(243,27,27);height: 32px;width: 32px;">
-                            <svg class="bi bi-x-lg" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(0,0,0);">
-                                <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"></path>
-                                <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"></path>
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png" style="width: 31px;margin-right: 5px;" width="31" height="29" />imAlreadyInDb.xlsx</td>
-                    <td style="text-align: center;"><button class="btn btn-primary btn-sm" type="button" style="background: rgb(158,0,255);height: 32px;width: 50px;">View</button></td>
-                    <td class="d-flex justify-content-center align-items-center">
-                        <button class="btn btn-primary btn-sm d-flex justify-content-center align-items-center" type="button" style="background: rgb(243,27,27);height: 32px;width: 32px;">
-                            <svg class="bi bi-x-lg" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(0,0,0);">
-                                <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"></path>
-                                <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"></path>
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                            @if (file.IsInDatabase == false)
+                            {
+                                <td style="text-align: center; border-width: 0px;">
+                                    <form action="/Home/PushFileIntoDatabase" method="post">
+                                        <input hidden name="fileName" value="@file.Name">
+                                        <button class="btn btn-primary btn-sm" type="submit" style="background: rgb(27,48,243);height: 32px;width: 120px; border: none;">
+                                            Add to database
+                                        </button>
+                                    </form>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="text-align: center; border-width: 0px;">
+                                    <button class="btn btn-primary btn-sm" type="button" style="background: rgb(158,0,255);height: 32px;width: 125px;border: none;">
+                                        View in database
+                                    </button>
+                                </td>
+                            }
+
+                            <td class="d-flex justify-content-center align-items-center border-width: 0px;">
+                                <form action="/Home/DeleteFileFromFolder" method="post">
+                                    <input hidden name="fileName" value="@file.Name">
+
+                                    <button class="btn btn-primary btn-sm d-flex justify-content-center align-items-center" type="submit" style="background: rgb(243,27,27);height: 32px;width: 32px;border: none;border-radius: 10px;">
+                                        <svg class="bi bi-x-lg" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: rgb(0,0,0);">
+                                            <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"></path>
+                                            <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"></path>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+}

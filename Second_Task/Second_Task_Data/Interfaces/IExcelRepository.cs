@@ -11,6 +11,7 @@ namespace Second_Task_Data.Interfaces
     {
         public Task AddExcelFile(ExcelFile excelFile);
         public Task<ExcelFile> GetExcelFile();
+        public List<string> GetExcelFileNames();
         public Task RemoveExcelFile(string excelFileName);
         public Task SaveDatabase();
     }

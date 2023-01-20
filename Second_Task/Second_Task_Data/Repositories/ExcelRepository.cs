@@ -36,5 +36,10 @@ namespace Second_Task_Data.Repositories
         {
             await _dbContext.SaveChangesAsync();
         }
+
+        public List<string> GetExcelFileNames()
+        {
+            return _dbContext.ExcelFiles.Select(q => q.ExcelFileName).ToList();
+        }
     }
 }

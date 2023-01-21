@@ -16,14 +16,14 @@ namespace Second_Task_Entities.ExcelEntities.ExcelEntitiesConfiguration
             builder.HasKey(q => q.ExcelAccountGroupId);
 
             //Main properties
-            builder.Property(q => q.TotalActiveAccountOpeningBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalPassiveAccountOpeningBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalDebitAccountNegotiableBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalCreditAccountNegotiableBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalActiveAccountOutgoingBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalPassiveAccountOutgoingBalance).HasPrecision(24, 3);
-            builder.Property(q => q.ActualTotalActiveAccountOutgoingBalance).HasPrecision(24, 3);
-            builder.Property(q => q.ActualTotalPassiveAccountOutgoingBalance).HasPrecision(24, 3);
+            builder.Property(q => q.TotalActiveAccountOpeningBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalPassiveAccountOpeningBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalDebitAccountNegotiableBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalCreditAccountNegotiableBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalActiveAccountOutgoingBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalPassiveAccountOutgoingBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.ActualTotalActiveAccountOutgoingBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.ActualTotalPassiveAccountOutgoingBalance).HasColumnType("decimal(30,2)");
 
             //Many-to-one FK
             builder.HasMany(q => q.ExcelAccounts).WithOne(q => q.ExcelAccountGroup).HasForeignKey(q => q.ExcelAccountGroupId);

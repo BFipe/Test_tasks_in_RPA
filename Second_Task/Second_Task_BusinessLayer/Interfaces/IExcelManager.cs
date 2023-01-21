@@ -12,8 +12,8 @@ namespace Second_Task_BusinessLayer.Interfaces
     {
         public Task ReadFile(string xlsxFilePath);
 
-        public List<DbFileInfo> GetFilesInfo();
-        public Task<ExcelFile> GetFileData();
+        public Task<List<DbFileInfo>> GetFilesInfo();
+        public Task<ExcelFile> GetFileData(string fileId);
         public Task DeleteFile(string fileId);
     }
 }

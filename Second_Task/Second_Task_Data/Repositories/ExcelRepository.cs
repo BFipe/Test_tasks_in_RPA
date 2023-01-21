@@ -28,24 +28,34 @@ namespace Second_Task_Data.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public List<string> GetExcelFileNames()
+        public Task<List<string>> GetExcelFileNames()
         {
-            return _dbContext.ExcelFiles.Select(q => q.ExcelFileName).ToList();
+            return _dbContext.ExcelFiles.Select(q => q.ExcelFileName).ToListAsync();
         }
 
-        public List<ExcelFile> GetExcelFilesInfo()
+        public Task<List<ExcelFile>> GetExcelFilesInfo()
         {
-            return _dbContext.ExcelFiles.ToList();
+            return _dbContext.ExcelFiles.ToListAsync();
         }
 
-        public Task<ExcelFile> GetExcelFile(string fileId)
+        public Task<ExcelFile> GetExcelFileInfo(string fileId)
         {
             return _dbContext.ExcelFiles.SingleOrDefaultAsync(q => q.ExcelFileId == fileId);
         }
 
-        public void RemoveExcelFile(ExcelFile excelFile)
+        public Task<ExcelFile> GetExcelFileData(string fileId)
         {
-            _dbContext.ExcelFiles.Remove(excelFile);
+            return _dbContext.ExcelFiles
+                .Include(q => q.ExcelClasses.OrderBy(q => q.Name))
+                .ThenInclude(q => q.ExcelAccountGroups.OrderBy(q => q.AccountingValue))
+                .ThenInclude(q => q.ExcelAccounts.OrderBy(q => q.AccountingValue))
+                .SingleOrDefaultAsync(q => q.ExcelFileId == fileId);
+        }
+
+        public Task RemoveExcelFile(ExcelFile excelFile)
+        {
+           _dbContext.ExcelFiles.Remove(excelFile);
+            return Task.CompletedTask;
         }
     }
 }

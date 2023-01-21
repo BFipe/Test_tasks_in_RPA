@@ -19,22 +19,22 @@ namespace Second_Task_Entities.ExcelEntities.ExcelEntitiesConfiguration
             builder.HasIndex(q => q.ExcelFileName).IsUnique();
 
             //File data
-            builder.Property(q => q.ExcelFileName).HasMaxLength(30);
+            builder.Property(q => q.ExcelFileName).HasMaxLength(100);
             builder.Property(q => q.ExcelFileDescription).HasMaxLength(180);
             builder.Property(q => q.ExcelFileBankName).HasMaxLength(30);
 
             //Main properties
-            builder.Property(q => q.TotalActiveOpeningBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalPassiveOpeningBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalDebitNegotiableBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalCreditNegotiableBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalActiveOutgoingBalance).HasPrecision(24, 3);
-            builder.Property(q => q.TotalPassiveOutgoingBalance).HasPrecision(24, 3);
-            builder.Property(q => q.ActualTotalActiveOutgoingBalance).HasPrecision(24, 3);
-            builder.Property(q => q.ActualTotalPassiveOutgoingBalance).HasPrecision(24, 3);
+            builder.Property(q => q.TotalActiveOpeningBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalPassiveOpeningBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalDebitNegotiableBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalCreditNegotiableBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalActiveOutgoingBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.TotalPassiveOutgoingBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.ActualTotalActiveOutgoingBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.ActualTotalPassiveOutgoingBalance).HasColumnType("decimal(30,2)");
 
             //Many-to-one FK
-            builder.HasMany(q => q.ExcelClasses).WithOne(q => q.ExcelFile).HasForeignKey(q => q.ExcelFileId);   
+            builder.HasMany(q => q.ExcelClasses).WithOne(q => q.ExcelFile).HasForeignKey(q => q.ExcelFileId);
         }
     }
 }

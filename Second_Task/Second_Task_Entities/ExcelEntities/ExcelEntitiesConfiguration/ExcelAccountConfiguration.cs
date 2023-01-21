@@ -16,14 +16,14 @@ namespace Second_Task_Entities.ExcelEntities.ExcelEntitiesConfiguration
             builder.HasKey(q => q.ExcelAccountId);
 
             //Main properties
-            builder.Property(q => q.ActiveAccountOpeningBalance).HasPrecision(24, 3);
-            builder.Property(q => q.PassiveAccountOpeningBalance).HasPrecision(24, 3);
-            builder.Property(q => q.DebitAccountNegotiableBalance).HasPrecision(24, 3);
-            builder.Property(q => q.CreditAccountNegotiableBalance).HasPrecision(24, 3);
-            builder.Property(q => q.ActiveAccountOutgoingBalance).HasPrecision(24, 3);
-            builder.Property(q => q.PassiveAccountOutgoingBalance).HasPrecision(24, 3);
-            builder.Property(q => q.ActualActiveAccountOutgoingBalance).HasPrecision(24, 3);
-            builder.Property(q => q.ActualPassiveAccountOutgoingBalance).HasPrecision(24, 3);
+            builder.Property(q => q.ActiveAccountOpeningBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.PassiveAccountOpeningBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.DebitAccountNegotiableBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.CreditAccountNegotiableBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.ActiveAccountOutgoingBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.PassiveAccountOutgoingBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.ActualActiveAccountOutgoingBalance).HasColumnType("decimal(30,2)");
+            builder.Property(q => q.ActualPassiveAccountOutgoingBalance).HasColumnType("decimal(30,2)");
         }
     }
 }

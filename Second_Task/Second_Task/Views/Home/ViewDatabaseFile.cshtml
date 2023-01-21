@@ -1,0 +1,208 @@
+﻿@model DatabaseFileDataViewModel
+
+@{
+    string activeOutgoingDataStatus;
+    string activeOutgoingCalculatedDataStatus;
+    string passiveOutgoingDataStatus;
+    string passiveOutgoingCalculatedDataStatus;
+}
+
+@if (Model.FileData != null && Model.FileData.ExcelClasses.Any())
+{
+    <h1 style="margin-top: 12px;text-align: center;margin-bottom: 48px;">
+        Оборотная ведомость по балансовым счетам за период c 01.01.2016 по 31.12.2016 по банку @Model.FileData.ExcelFileBankName
+    </h1>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="9">@Model.FileData.ExcelFileName</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td style="text-align: center;" rowspan="2">Б/сч</td>
+                    <td style="text-align: center;" colspan="2">ВХОДЯЩЕЕ САЛЬДО</td>
+                    <td style="text-align: center;" colspan="2">ОБОРОТЫ</td>
+                    <td style="text-align: center;" colspan="2">ИСХОДЯЩЕЕ САЛЬДО</td>
+                    <td style="text-align: center;" colspan="2">КАЛЬКУЛИРУЕМОЕ<br />ИСХОДЯЩЕЕ САЛЬДО</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">Актив</td>
+                    <td style="text-align: center;">Пассив</td>
+                    <td style="text-align: center;">Дебет</td>
+                    <td style="text-align: center;">Кредит</td>
+                    <td style="text-align: center;">Актив</td>
+                    <td style="text-align: center;">Пассив</td>
+                    <td style="text-align: center;">Актив</td>
+                    <td style="text-align: center;">Пассив</td>
+                </tr>
+                @foreach (var excelClass in Model.FileData.ExcelClasses)
+                {
+
+                    <tr style="border-width: 8px;border-color: rgb(255,255,255); border-right-width: 0px;border-left-width: 0px;">
+                        <td style="text-align: center;" colspan="9">@excelClass.Name</td>
+                    </tr>
+
+                    @foreach (var excelAccountGroup in excelClass.ExcelAccountGroups)
+                    {
+
+                        @foreach (var excelAccount in excelAccountGroup.ExcelAccounts)
+                        {
+                            <tr style="text-align: right;font-size: 12px;">
+                                <td style="text-align: left;">@excelAccount.AccountingValue</td>
+                                <td>@excelAccount.ActiveAccountOpeningBalance</td>
+                                <td>@excelAccount.PassiveAccountOpeningBalance</td>
+                                <td>@excelAccount.DebitAccountNegotiableBalance</td>
+                                <td>@excelAccount.CreditAccountNegotiableBalance</td>
+
+
+                                @if (excelAccount.ActiveAccountOutgoingBalance != excelAccount.ActualActiveAccountOutgoingBalance)
+                                {
+                                    activeOutgoingDataStatus = "background: rgb(193,0,0);";
+                                    activeOutgoingCalculatedDataStatus = "background: rgb(26,183,0);";
+                                }
+                                else
+                                {
+                                    activeOutgoingDataStatus = "";
+                                    activeOutgoingCalculatedDataStatus = "";
+
+                                }
+
+                                @if (excelAccount.PassiveAccountOutgoingBalance != excelAccount.ActualPassiveAccountOutgoingBalance)
+                                {
+                                    passiveOutgoingDataStatus = "background: rgb(193,0,0);";
+                                    passiveOutgoingCalculatedDataStatus = "background: rgb(26,183,0);";
+                                }
+                                else
+                                {
+                                    passiveOutgoingDataStatus = "";
+                                    passiveOutgoingCalculatedDataStatus = "";
+                                }
+
+                                <td style="@activeOutgoingDataStatus">@excelAccount.ActiveAccountOutgoingBalance</td>
+                                <td style="@passiveOutgoingDataStatus">@excelAccount.PassiveAccountOutgoingBalance</td>
+                                <td style="@activeOutgoingCalculatedDataStatus">@excelAccount.ActualActiveAccountOutgoingBalance</td>
+                                <td style="@passiveOutgoingCalculatedDataStatus">@excelAccount.ActualPassiveAccountOutgoingBalance</td>
+                            </tr>
+                        }
+
+                        <tr style="text-align: right;font-size: 14px;font-weight: bold;border: 3px solid rgb(209,209,209); border-right-width: 0px;border-left-width: 0px;">
+                            <td style="text-align: left;">@excelAccountGroup.AccountingValue</td>
+                            <td>@excelAccountGroup.TotalActiveAccountOpeningBalance</td>
+                            <td>@excelAccountGroup.TotalPassiveAccountOpeningBalance</td>
+                            <td>@excelAccountGroup.TotalDebitAccountNegotiableBalance</td>
+                            <td>@excelAccountGroup.TotalCreditAccountNegotiableBalance</td>
+
+                            @if (excelAccountGroup.TotalActiveAccountOutgoingBalance != excelAccountGroup.ActualTotalActiveAccountOutgoingBalance)
+                            {
+                                activeOutgoingDataStatus = "background: rgb(193,0,0);";
+                                activeOutgoingCalculatedDataStatus = "background: rgb(26,183,0);";
+                            }
+                            else
+                            {
+                                activeOutgoingDataStatus = "";
+                                activeOutgoingCalculatedDataStatus = "";
+
+                            }
+
+                            @if (excelAccountGroup.TotalPassiveAccountOutgoingBalance != excelAccountGroup.ActualTotalPassiveAccountOutgoingBalance)
+                            {
+                                passiveOutgoingDataStatus = "background: rgb(193,0,0);";
+                                passiveOutgoingCalculatedDataStatus = "background: rgb(26,183,0);";
+                            }
+                            else
+                            {
+                                passiveOutgoingDataStatus = "";
+                                passiveOutgoingCalculatedDataStatus = "";
+                            }
+                            <td style="@activeOutgoingDataStatus">@excelAccountGroup.TotalActiveAccountOutgoingBalance</td>
+                            <td style="@passiveOutgoingDataStatus">@excelAccountGroup.TotalPassiveAccountOutgoingBalance</td>
+                            <td style="@activeOutgoingCalculatedDataStatus">@excelAccountGroup.ActualTotalActiveAccountOutgoingBalance</td>
+                            <td style="@passiveOutgoingCalculatedDataStatus">@excelAccountGroup.ActualTotalPassiveAccountOutgoingBalance</td>
+                        </tr>
+                    }
+
+
+                    <tr style="text-align: right;font-size: 14px;font-weight: bold;border: 6px solid rgb(195 192 255); border-right-width: 0px;border-left-width: 0px;">
+                        <td style="text-align: left;">ПО КЛАССУ</td>
+                        <td>@excelClass.TotalActiveClassOpeningBalance</td>
+                        <td>@excelClass.TotalPassiveClassOpeningBalance</td>
+                        <td>@excelClass.TotalDebitClassNegotiableBalance</td>
+                        <td>@excelClass.TotalCreditClassNegotiableBalance</td>
+
+                        @if (excelClass.TotalActiveClassOutgoingBalance != excelClass.ActualTotalActiveClassOutgoingBalance)
+                        {
+                            activeOutgoingDataStatus = "background: rgb(193,0,0);";
+                            activeOutgoingCalculatedDataStatus = "background: rgb(26,183,0);";
+                        }
+                        else
+                        {
+                            activeOutgoingDataStatus = "";
+                            activeOutgoingCalculatedDataStatus = "";
+
+                        }
+
+                        @if (excelClass.TotalPassiveClassOutgoingBalance != excelClass.ActualTotalPassiveClassOutgoingBalance)
+                        {
+                            passiveOutgoingDataStatus = "background: rgb(193,0,0);";
+                            passiveOutgoingCalculatedDataStatus = "background: rgb(26,183,0);";
+                        }
+                        else
+                        {
+                            passiveOutgoingDataStatus = "";
+                            passiveOutgoingCalculatedDataStatus = "";
+                        }
+                        <td style="@activeOutgoingDataStatus">@excelClass.TotalActiveClassOutgoingBalance</td>
+                        <td style="@passiveOutgoingDataStatus">@excelClass.TotalPassiveClassOutgoingBalance</td>
+                        <td style="@activeOutgoingCalculatedDataStatus">@excelClass.ActualTotalActiveClassOutgoingBalance</td>
+                        <td style="@passiveOutgoingCalculatedDataStatus">@excelClass.ActualTotalPassiveClassOutgoingBalance</td>
+                    </tr>
+                }
+                <tr style="text-align: right;font-size: 14px;font-weight: bold; border: 7px solid rgb(5,255,0);border-right-width: 0px;border-left-width: 0px;">
+                    <td style="text-align: left;">БАЛАНС</td>
+                    <td>@Model.FileData.TotalActiveOpeningBalance</td>
+                    <td>@Model.FileData.TotalPassiveOpeningBalance</td>
+                    <td>@Model.FileData.TotalDebitNegotiableBalance</td>
+                    <td>@Model.FileData.TotalCreditNegotiableBalance</td>
+
+                    @if (Model.FileData.TotalActiveOutgoingBalance != Model.FileData.ActualTotalActiveOutgoingBalance)
+                    {
+                        activeOutgoingDataStatus = "background: rgb(193,0,0);";
+                        activeOutgoingCalculatedDataStatus = "background: rgb(26,183,0);";
+                    }
+                    else
+                    {
+                        activeOutgoingDataStatus = "";
+                        activeOutgoingCalculatedDataStatus = "";
+                    }
+
+                    @if (Model.FileData.TotalPassiveOutgoingBalance != Model.FileData.ActualTotalPassiveOutgoingBalance)
+                    {
+                        passiveOutgoingDataStatus = "background: rgb(193,0,0);";
+                        passiveOutgoingCalculatedDataStatus = "background: rgb(26,183,0);";
+                    }
+                    else
+                    {
+                        passiveOutgoingDataStatus = "";
+                        passiveOutgoingCalculatedDataStatus = "";
+                    }
+
+                    <td style="@activeOutgoingDataStatus">@Model.FileData.TotalActiveOutgoingBalance</td>
+                    <td style="@passiveOutgoingDataStatus">@Model.FileData.TotalPassiveOutgoingBalance</td>
+
+                    <td style="@activeOutgoingCalculatedDataStatus">@Model.FileData.ActualTotalActiveOutgoingBalance</td>
+                    <td style="@passiveOutgoingCalculatedDataStatus">@Model.FileData.ActualTotalPassiveOutgoingBalance</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a class="btn btn-primary btn-sm" href="/Home/FileManagement" style="background: rgb(0,113,11);">Back to the main page</a>
+    </div>
+}
+else
+{
+
+}

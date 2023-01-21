@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Second_Task.Models;
+using Second_Task.Models.DatabaseModels;
 using Second_Task.Models.FileModels;
 using Second_Task_BusinessLayer.Interfaces;
 using System.Diagnostics;
@@ -34,8 +35,8 @@ namespace Second_Task.Controllers
             try
             {
                 //Get info about files in folder (Name and if file with the same name is already in the database)
-                fileViewModel.FileEntities = _fileManager.GetFolderFileEntities();
-                fileViewModel.DbFiles = _excelManager.GetFilesInfo();
+                fileViewModel.FileEntities = await _fileManager.GetFolderFileEntities();
+                fileViewModel.DbFiles = await _excelManager.GetFilesInfo();
             }
             catch (Exception ex)
             {
@@ -118,7 +119,22 @@ namespace Second_Task.Controllers
             }
             return RedirectToAction("FileManagement");
         }
-        
+
+        [HttpPost]
+        public async Task<IActionResult> ViewDatabaseFile(string fileId)
+        {
+            DatabaseFileDataViewModel databaseFileDataViewModel = new();
+            if (String.IsNullOrWhiteSpace(fileId)) return RedirectToAction("FileManagement");
+            try
+            {
+                databaseFileDataViewModel.FileData = await _excelManager.GetFileData(fileId);
+            }
+            catch (Exception ex)
+            {
+                databaseFileDataViewModel.Errors.Add(ex.Message);
+            }
+            return View(databaseFileDataViewModel);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

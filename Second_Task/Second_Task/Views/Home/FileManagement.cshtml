@@ -1,6 +1,6 @@
 ﻿@model FileViewModel
 
-<div class="d-flex justify-content-center align-items-baseline" style="margin-top: 100px">
+<div class="d-flex justify-content-center align-items-baseline" style="margin-top: 40px">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png" style="width: 96px;margin-bottom: 7px;" />
 </div>
 
@@ -27,7 +27,7 @@
 @if (Model.FileEntities.Any() == false)
 {
     <p style="text-align: center;color: rgb(0,0,0);font-size: 22px;">
-        You currently have no files.
+        You currently have no .xlsx files.
         <br />
         Submit them by using the form above!
     </p>
@@ -51,7 +51,7 @@ else
                                 <td style="text-align: center; border-width: 0px;">
                                     <form action="/Home/PushFileIntoDatabase" method="post">
                                         <input hidden name="fileName" value="@file.Name">
-                                        <button class="btn btn-primary btn-sm" type="submit" style="background: rgb(27,48,243);height: 32px;width: 120px; border: none;">
+                                        <button class="btn btn-primary btn-sm" type="submit" style="background: rgb(130,5,255);height: 32px;width: 120px; border: none;">
                                             Add to database
                                         </button>
                                     </form>

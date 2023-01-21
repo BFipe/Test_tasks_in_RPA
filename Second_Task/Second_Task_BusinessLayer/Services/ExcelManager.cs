@@ -24,14 +24,9 @@ namespace Second_Task_BusinessLayer.Services
             _excelRepository = excelRepository;
         }
 
-        public Task<ExcelFile> GetFileData()
+        public async Task<List<DbFileInfo>> GetFilesInfo()
         {
-            throw new NotImplementedException();
-        }
-
-        public List<DbFileInfo> GetFilesInfo()
-        {
-            var info = _excelRepository.GetExcelFilesInfo();
+            var info = await _excelRepository.GetExcelFilesInfo();
             List<DbFileInfo> dbFileInfos = new();
             info.ForEach(data =>
             {
@@ -216,11 +211,16 @@ namespace Second_Task_BusinessLayer.Services
 
         public async Task DeleteFile(string fileId)
         {
-            var file = await _excelRepository.GetExcelFile(fileId);
+            var file = await _excelRepository.GetExcelFileInfo(fileId);
             if (file == null) throw new Exception($"Database does not contains file with id {fileId}");
 
-            _excelRepository.RemoveExcelFile(file);
+            await _excelRepository.RemoveExcelFile(file);
             await _excelRepository.SaveDatabase();
+        }
+
+        public async Task<ExcelFile> GetFileData(string fileId)
+        {
+            return await _excelRepository.GetExcelFileData(fileId);  
         }
     }
 }

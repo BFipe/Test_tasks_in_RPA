@@ -23,7 +23,7 @@ namespace Second_Task_BusinessLayer.Services
         //Saving file in wwwroot path
         public void SaveXslxInFolder(byte[] file, string fileName)
         {
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\ExcelFiles", fileName);
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ExcelFiles", fileName);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
@@ -32,9 +32,9 @@ namespace Second_Task_BusinessLayer.Services
         }
 
         //Get all data from folder and database about folder files
-        public List<FolderFileEntity> GetFolderFileEntities()
+        public async Task<List<FolderFileEntity>> GetFolderFileEntities()
         {
-            List<string> dbFileNames = _excelRepository.GetExcelFileNames();
+            List<string> dbFileNames = await _excelRepository.GetExcelFileNames();
 
             //Getting all file's names from the ExcelFiles folder
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ExcelFiles");

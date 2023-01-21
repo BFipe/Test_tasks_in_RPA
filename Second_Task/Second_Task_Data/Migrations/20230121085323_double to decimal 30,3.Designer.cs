@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Second_Task_Data;
 
@@ -10,9 +11,11 @@ using Second_Task_Data;
 namespace SecondTaskData.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230121085323_double to decimal 30,3")]
+    partial class doubletodecimal303
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,32 +33,32 @@ namespace SecondTaskData.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("ActiveAccountOpeningBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("ActiveAccountOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("ActualActiveAccountOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("ActualPassiveAccountOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("CreditAccountNegotiableBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("DebitAccountNegotiableBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<string>("ExcelAccountGroupId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("PassiveAccountOpeningBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("PassiveAccountOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.HasKey("ExcelAccountId");
 
@@ -73,10 +76,10 @@ namespace SecondTaskData.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("ActualTotalActiveAccountOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("ActualTotalPassiveAccountOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<int>("EndingValuesRow")
                         .HasColumnType("int");
@@ -89,22 +92,22 @@ namespace SecondTaskData.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalActiveAccountOpeningBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalActiveAccountOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalCreditAccountNegotiableBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalDebitAccountNegotiableBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalPassiveAccountOpeningBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalPassiveAccountOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.HasKey("ExcelAccountGroupId");
 
@@ -119,10 +122,10 @@ namespace SecondTaskData.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("ActualTotalActiveClassOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("ActualTotalPassiveClassOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<int>("EndingValuesRow")
                         .HasColumnType("int");
@@ -139,22 +142,22 @@ namespace SecondTaskData.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalActiveClassOpeningBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalActiveClassOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalCreditClassNegotiableBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalDebitClassNegotiableBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalPassiveClassOpeningBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalPassiveClassOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.HasKey("ExcelClassId");
 
@@ -169,10 +172,10 @@ namespace SecondTaskData.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("ActualTotalActiveOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("ActualTotalPassiveOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<string>("ExcelFileBankName")
                         .IsRequired()
@@ -190,22 +193,22 @@ namespace SecondTaskData.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("TotalActiveOpeningBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalActiveOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalCreditNegotiableBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalDebitNegotiableBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalPassiveOpeningBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.Property<decimal>("TotalPassiveOutgoingBalance")
-                        .HasColumnType("decimal(30,2)");
+                        .HasColumnType("decimal(30,3)");
 
                     b.HasKey("ExcelFileId");
 

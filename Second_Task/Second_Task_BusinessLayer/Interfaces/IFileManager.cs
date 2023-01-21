@@ -11,7 +11,7 @@ namespace Second_Task_BusinessLayer.Interfaces
     {
         public void SaveXslxInFolder(byte[] file, string fileName);
 
-        public List<FolderFileEntity> GetFolderFileEntities();
+        public Task<List<FolderFileEntity>> GetFolderFileEntities();
 
         public void DeleteFile(string fileName);
 

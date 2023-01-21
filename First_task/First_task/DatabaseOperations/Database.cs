@@ -1,4 +1,6 @@
-﻿using First_task.DatabaseOperations.Entities;
+﻿using EFCore.BulkExtensions;
+using First_task.DatabaseOperations.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -56,7 +58,8 @@ namespace First_task.DatabaseOperations
 
                     if (tableEntities.Count == dataPackCount)
                     {
-                        await _dbContext.TableEntities.AddRangeAsync(tableEntities);
+                        await _dbContext.BulkInsertAsync(tableEntities);
+                        //await _dbContext.TableEntities.AddRangeAsync(tableEntities);
                         await _dbContext.SaveChangesAsync();
                         Console.WriteLine($"{String.Format("{0:0.0}", ((double)rowsAddedCounter / rowsTotalCounter * 100))}% done ({rowsAddedCounter} of {rowsTotalCounter} rows)");
                         tableEntities.Clear();
@@ -64,7 +67,8 @@ namespace First_task.DatabaseOperations
                 }
                 if (tableEntities.Any())
                 {
-                    await _dbContext.TableEntities.AddRangeAsync(tableEntities);
+                    await _dbContext.BulkInsertAsync(tableEntities);
+                    //await _dbContext.TableEntities.AddRangeAsync(tableEntities);
                     await _dbContext.SaveChangesAsync();
                     Console.WriteLine($"100% done ({rowsAddedCounter} of {rowsTotalCounter} rows)");
                     tableEntities.Clear();
@@ -79,6 +83,8 @@ namespace First_task.DatabaseOperations
 
         public decimal DoubleMedian()
         {
+            if (_dbContext.TableEntities.Any() == false) return 0;
+      
             var decimalNumbers = _dbContext.TableEntities.Select(q => q.DecimalNumber).OrderBy(q => q).ToList();
             if (decimalNumbers.Count % 2 == 1)
             {

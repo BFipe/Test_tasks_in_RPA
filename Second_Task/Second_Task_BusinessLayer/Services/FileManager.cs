@@ -76,6 +76,7 @@ namespace Second_Task_BusinessLayer.Services
 
         public async Task PushFileIntoDatabase(string fileName)
         {
+            //Pushing file into db from the folder
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ExcelFiles", fileName);
             if (File.Exists(filePath))
             {

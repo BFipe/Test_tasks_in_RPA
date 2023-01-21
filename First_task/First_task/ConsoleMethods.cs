@@ -18,6 +18,7 @@ namespace First_task
 
         public static void GenerateFiles()
         {
+            //Check default parameters
             if (String.IsNullOrEmpty(Parameters.FolderDataPath))
             {
                 ChangeGeneratorParameters();
@@ -25,6 +26,7 @@ namespace First_task
             }
             else
             {
+                //If you already have some parameters it will suggest you to use them 
                 Console.Clear();
                 Console.WriteLine("Use this parameters? y/n");
                 Console.WriteLine($"Number of files - {Parameters.TextFilesNumber}");
@@ -55,7 +57,7 @@ namespace First_task
             }
         }
 
-
+        //Changing parameters option
         private static void ChangeGeneratorParameters()
         {
             int numOfFiles = 0;
@@ -116,14 +118,17 @@ namespace First_task
 
         }
 
+        //main generating procedure
         private static void Generate()
         {
             Console.Clear();
             FileGenerator.GenerateFilesInParallel(Parameters.TextFilesNumber, Parameters.TextRowsNumber, Parameters.FolderDataPath);
         }
 
+
         public static void MergeFilesProcedure()
         {
+
             if (String.IsNullOrEmpty(Parameters.FolderDataPath) || String.IsNullOrEmpty(Parameters.FolderOutputPath) || String.IsNullOrEmpty(Parameters.ResultFileName))
             {
                 ChangeMergeParameters();
@@ -131,6 +136,7 @@ namespace First_task
             }
             else
             {
+                //If you already have some parameters it will suggest you to use them 
                 Console.WriteLine("Use this parameters? y/n");
                 Console.WriteLine($"Folder with merging data - {Parameters.FolderDataPath}");
                 Console.WriteLine($"Folder output path - {Parameters.FolderOutputPath}");
@@ -162,6 +168,7 @@ namespace First_task
             }
         }
 
+        //main changing merge parameters procedure
         private static void ChangeMergeParameters()
         {
             string outputPath = string.Empty;
@@ -253,11 +260,13 @@ namespace First_task
             }
         }
 
+        //main merging procedure
         private static void Merge()
         {
             MergeFiles.MergeFilesInParallel(Parameters.FolderDataPath, Parameters.FolderOutputPath, Parameters.ResultFileName, Parameters.FilterString);
         }
 
+        //Pushing data in database procedure
         public async static Task PushData(Database database)
         {
             if (String.IsNullOrEmpty(Parameters.ResultFilePath))
@@ -267,6 +276,7 @@ namespace First_task
             }
             else
             {
+                //If you already have some parameters it will suggest you to use them 
                 Parameters.TxtFilePath = Parameters.ResultFilePath;
                 Console.Clear();
                 Console.WriteLine("Use this parameters? y/n");
@@ -299,6 +309,7 @@ namespace First_task
             }
         }
 
+        //changing push parameters
         private static void ChangePushParameters()
         {
             string txtFilePath = string.Empty;
@@ -340,16 +351,19 @@ namespace First_task
             }
         }
 
+        //Pushing data
         private async static Task PushDataIntoDB(Database database)
         {
             await database.AddDataFromTxt(Parameters.TxtFilePath);
         }
 
+        //Get sum of all integers
         public static void GetSum(Database database)
         {
             Console.WriteLine(database.AllIntegerSum());
         }
 
+        //get median of all decimals
         public static void GetMedian(Database database)
         {
             Console.WriteLine(database.DoubleMedian());
